@@ -86,6 +86,8 @@
   .tab{padding:9px 18px;border-radius:999px;border:1.5px solid var(--line);background:#fff;font-weight:600;font-size:14.5px;color:var(--muted);cursor:pointer;font-family:'Inter';transition:.16s;}
   .tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
   .pane{display:none;} .pane.active{display:block;}
+  .navrow{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:34px;padding-top:24px;border-top:1px solid var(--line);}
+  .navrow .btn{white-space:nowrap;}
 
   /* CARDS / CONCEPTS */
   .card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:28px 26px;margin-bottom:18px;}
@@ -217,8 +219,8 @@
     <h1 class="big">Learn the essentials</h1>
     <p class="lede">Two short things: a cheat sheet for talking to Cowork, and three lessons to keep with you long after today.</p>
     <div class="subnav">
-      <button class="tab active" onclick="tab('cheat', this)">Cheat Sheet</button>
-      <button class="tab" onclick="tab('lessons', this)">3 Lessons</button>
+      <button class="tab active" data-pane="cheat" onclick="goTab('cheat')">Cheat Sheet</button>
+      <button class="tab" data-pane="lessons" onclick="goTab('lessons')">3 Lessons</button>
     </div>
 
     <!-- CHEAT SHEET -->
@@ -270,6 +272,10 @@
           <pre>Summarize this contractor estimate into 5 plain-English bullet points a homeowner would understand, and flag anything that looks unusual or worth a second look.</pre>
         </div>
       </div>
+      <div class="navrow">
+        <span></span>
+        <button class="btn btn-primary" onclick="goTab('lessons')">Next: the 3 lessons &rsaquo;</button>
+      </div>
     </div>
 
     <!-- LESSONS -->
@@ -298,7 +304,8 @@
           <p>Every message and file that goes out under your name is your responsibility. Cowork is a powerful teammate, but the judgment, the relationships, and the final call stay human. Stay in the driver's seat.</p>
         </div>
       </div>
-      <div style="text-align:center;margin-top:26px;">
+      <div class="navrow">
+        <button class="btn btn-ghost" onclick="goTab('cheat')">&lsaquo; Cheat sheet</button>
         <button class="btn btn-primary" onclick="go('tryit')">Let's try it &rsaquo;</button>
       </div>
     </div>
@@ -350,6 +357,10 @@
       <h3 style="color:#fff;">That's the power in your hands</h3>
       <p style="color:#C3D0E0;">Next time, we connect Cowork to the tools you already use, so it doesn't just talk about the work, it reaches in and does it.</p>
     </div>
+    <div class="navrow">
+      <button class="btn btn-ghost" onclick="go('learn')">&lsaquo; Back to lessons</button>
+      <a class="btn btn-primary" href="https://calendly.com/thomas-stonepathadvisory" target="_blank" rel="noopener">Book a call &rsaquo;</a>
+    </div>
   </section>
 
 </main>
@@ -367,7 +378,7 @@
 
 <script>
   // ---- Passcode. Change this value to set your own code. ----
-  var PASSCODE = "Stonepath2026";
+  var PASSCODE = "stonepath";
 
   function tryGate(){
     var v = document.getElementById('pc').value.trim().toLowerCase();
@@ -436,11 +447,11 @@
   }
 
   // ---- Learn tabs ----
-  function tab(name, el){
-    document.querySelectorAll('#view-learn .tab').forEach(function(t){t.classList.remove('active');});
-    el.classList.add('active');
+  function goTab(name){
+    document.querySelectorAll('#view-learn .tab').forEach(function(t){ t.classList.toggle('active', t.dataset.pane===name); });
     document.querySelectorAll('#view-learn .pane').forEach(function(p){p.classList.remove('active');});
     document.getElementById('pane-'+name).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
   }
 
   // ---- Copy prompt ----
